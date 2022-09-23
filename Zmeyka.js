@@ -22,8 +22,15 @@ class Field {
     }
 }
 
-let element = document.createElement("div");
-element.classList.add("Cell");
-let field__div = document.getElementsByClassName('field')[0].appendChild(element);
+
+let field__div = document.getElementsByClassName('field')[0];
+
+for (let i=100; i>=1; i--) {
+    let element = document.createElement("div");
+    element.classList.add(`Cell`);
+    element.classList.add(`Cell${i}`);
+    field__div.appendChild(element);
+}
+
 
 

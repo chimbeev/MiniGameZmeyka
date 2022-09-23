@@ -7,14 +7,23 @@
     justify-content: center;
 }
 .field {
-    width: 280px;
-    height: 280px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap-reverse;
+    width: auto;
+    height: 360px;
     background-color: darkcyan;
+    align-content: center;
+
+
 }
 .Cell {
-    width: 80px;
-    height: 80px;
+    width: 30px;
+    height: 30px;
     background-color: darkgoldenrod;
+    border-style: solid;
+    border-width: medium;
+
 
 }
 
