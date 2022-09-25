@@ -30,8 +30,7 @@ class Field extends Cell { //Класс игровое поле
         }
     }
 }
-// Служебная переменная, которая отвечает за скорость змейки
-let count = 0;
+
 // змейка
 class Snake {
     constructor() {
@@ -77,21 +76,9 @@ class Apple extends Cell { //Класс Яблоко
 }
 
 // Игровой цикл — основной процесс, внутри которого будет всё происходить
-
 function loop() {
-    // Функция, которая замедляет скорость игры с 60 кадров в секунду до 15 (60/15 = 4)
-    //requestAnimationFrame(loop);
-    // Игровой код выполнится только один раз из четырёх, в этом и суть замедления кадров, а пока переменная count меньше четырёх, код выполняться не будет
-    //if (++count < 18) {
-    //    return;
-    //}
-    // Обнуляем переменную скорости
-    //count = 0;
     // Очищаем игровое поле
     field.clear();
-    // Двигаем змейку с нужной скоростью
-    //snake.x += snake.dx;
-    //snake.y += snake.dy;
     snake.moving();// Двигаем змейку с нужной скоростью
     // Если змейка достигла края поля по горизонтали — продолжаем её движение с противоположной строны
     if (snake.x < 1) {
@@ -122,25 +109,38 @@ function loop() {
         // Если змейка добралась до яблока...
         if (cell.x === apple.x && cell.y === apple.y) {
             // увеличиваем длину змейки
-            snake.maxCells++;
-            // Рисуем новое яблочко
-            field.clear();
+            let snakeLength = snake.maxCells++;
+            let showCount = document.getElementsByClassName(`count`)[0]; //Получаем объект где выводить счет
+            showCount.innerHTML = (snakeLength-2).toString(); //Выводим счет
+            if (bestResult < (snakeLength-2)) bestResult = snakeLength-2; //Обновляем лучший результат
+            let showBestResult = document.getElementsByClassName(`bestResult`)[0]; //Получаем объект где выводить счет
+            showBestResult.innerHTML = bestResult.toString(); //Выводим лучший результат
+            field.clear(); //Очищаем поле
             apple.getApple();// Рисуем новое яблочко
         }
         // Проверяем, не столкнулась ли змея сама с собой
         // Для этого перебираем весь массив и смотрим, есть ли у нас в массиве змейки две клетки с одинаковыми координатами
         for (let i = index + 1; i < snake.cells.length; i++) {
-            // Если такие клетки есть — начинаем игру заново
+            // Если такие клетки есть — Останавливаем игру
             if (cell.x === snake.cells[i].x && cell.y === snake.cells[i].y) {
-                // Задаём стартовые параметры основным переменным
-                snake.x = 4;
-                snake.y = 4;
-                snake.cells = [];
-                snake.maxCells = 2;
-                snake.dx = 1;
-                snake.dy = 0;
-                // Ставим яблочко в случайное место
-                apple.getApple();// Рисуем новое яблочко
+                localStorage.setItem('bestResult', `${bestResult}`);//Записываем лучший результат
+                let btn = document.createElement("button"); //Создаем кнопку для рестарта игры
+                btn.innerHTML = "Начать заново";
+                btn.addEventListener("click", function () {
+                    // Задаём стартовые параметры основным переменным
+                    snake.x = 4;
+                    snake.y = 4;
+                    snake.cells = [];
+                    snake.maxCells = 2;
+                    snake.dx = 1;
+                    snake.dy = 0;
+                    // Ставим яблочко в случайное место
+                    apple.getApple();// Рисуем новое яблочко
+                    let timerId = setInterval(loop, 500);
+
+                });
+                document.body.appendChild(btn);
+                clearInterval(timerId);
             }
         }
     });
@@ -168,9 +168,14 @@ document.addEventListener('keydown', function (e) {
         snake.dx = 0;
     }
 });
+
+let bestResult = localStorage.getItem('bestResult');
+if (!bestResult) bestResult = 0 ; //Если данных нет, то выводим 0
+let showBestResult = document.getElementsByClassName(`bestResult`)[0]; //Получаем объект где выводить результат
+showBestResult.innerHTML = (bestResult).toString(); //Выводим лучший результат
 // Запускаем игру
 let field = new Field();
 let apple = new Apple;
 let snake = new Snake();
 let timerId = setInterval(loop, 500);
-//requestAnimationFrame(loop);
+

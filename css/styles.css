@@ -32,20 +32,23 @@
     border-width: medium;
 }
 
-.headSnake {
-    width: 30px;
-    height: 30px;
-    background-color: greenyellow;
-    border-style: solid;
-    border-width: medium;
-}
-
 .Apple {
     width: 30px;
     height: 30px;
-    background-color: red;
+    background-color: darkgoldenrod;
     border-style: solid;
     border-width: medium;
-    border-radius: 50%;
+    position: relative;
 }
 
+.Apple:before{
+    content: '';
+    width: 28px;
+    height: 28px;
+    border-radius: 100%;
+    position: absolute;
+    top:15px;
+    left: 1px;
+    background-color: red;
+    transform: translateY(-50%);
+}
