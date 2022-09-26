@@ -30,7 +30,6 @@ class Field extends Cell { //Класс игровое поле
         }
     }
 }
-
 // змейка
 class Snake {
     constructor() {
@@ -74,7 +73,6 @@ class Apple extends Cell { //Класс Яблоко
         c.classList.add('Apple'); //Показать яблоко в клетке
     }
 }
-
 // Игровой цикл — основной процесс, внутри которого будет всё происходить
 function loop() {
     // Очищаем игровое поле
@@ -106,13 +104,13 @@ function loop() {
     snake.cells.forEach(function (cell, index) {
         let c = document.getElementsByClassName(`Cell${cell.x}${cell.y}`)[0]; //Получаем клетку где надо нарисовать змею
         c.classList.add('Snake'); //Показать змейку в клетке
-        // Если змейка добралась до яблока...
+        // Если змейка столкнулась с яблоком
         if (cell.x === apple.x && cell.y === apple.y) {
             // увеличиваем длину змейки
-            let snakeLength = snake.maxCells++;
+            snake.maxCells = snake.maxCells + 1;
             let showCount = document.getElementsByClassName(`count`)[0]; //Получаем объект где выводить счет
-            showCount.innerHTML = (snakeLength-2).toString(); //Выводим счет
-            if (bestResult < (snakeLength-2)) bestResult = snakeLength-2; //Обновляем лучший результат
+            showCount.innerHTML = (snake.maxCells - 2).toString(); //Выводим счет
+            if (bestResult < (snake.maxCells - 2)) bestResult = snake.maxCells - 2; //Обновляем лучший результат
             let showBestResult = document.getElementsByClassName(`bestResult`)[0]; //Получаем объект где выводить счет
             showBestResult.innerHTML = bestResult.toString(); //Выводим лучший результат
             field.clear(); //Очищаем поле
@@ -121,11 +119,13 @@ function loop() {
         // Проверяем, не столкнулась ли змея сама с собой
         // Для этого перебираем весь массив и смотрим, есть ли у нас в массиве змейки две клетки с одинаковыми координатами
         for (let i = index + 1; i < snake.cells.length; i++) {
-            // Если такие клетки есть — Останавливаем игру
+
             if (cell.x === snake.cells[i].x && cell.y === snake.cells[i].y) {
+                // Если такие клетки есть — Останавливаем игру
+
                 localStorage.setItem('bestResult', `${bestResult}`);//Записываем лучший результат
-                let btn = document.createElement("button"); //Создаем кнопку для рестарта игры
-                btn.innerHTML = "Начать заново";
+                let btn = document.getElementsByClassName(`restart`)[0];//Создаем кнопку для рестарта игры
+                btn.setAttribute('style', 'visibility: visible');
                 btn.addEventListener("click", function () {
                     // Задаём стартовые параметры основным переменным
                     snake.x = 4;
@@ -136,10 +136,9 @@ function loop() {
                     snake.dy = 0;
                     // Ставим яблочко в случайное место
                     apple.getApple();// Рисуем новое яблочко
+                    btn.setAttribute('style', 'visibility: hidden');
                     let timerId = setInterval(loop, 500);
-
                 });
-                document.body.appendChild(btn);
                 clearInterval(timerId);
             }
         }
