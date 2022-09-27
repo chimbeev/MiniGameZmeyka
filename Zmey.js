@@ -126,7 +126,7 @@ function loop() {
                 localStorage.setItem('bestResult', `${bestResult}`);//Записываем лучший результат
                 let btn = document.getElementsByClassName(`restart`)[0];//Создаем кнопку для рестарта игры
                 btn.setAttribute('style', 'visibility: visible');
-                btn.addEventListener("click", function () {
+                btn.addEventListener("click", function () { //При нажатии кнопки начинаем игру снова
                     // Задаём стартовые параметры основным переменным
                     snake.x = 4;
                     snake.y = 4;
@@ -136,10 +136,12 @@ function loop() {
                     snake.dy = 0;
                     // Ставим яблочко в случайное место
                     apple.getApple();// Рисуем новое яблочко
-                    btn.setAttribute('style', 'visibility: hidden');
-                    let timerId = setInterval(loop, 500);
+                    btn.setAttribute('style', 'visibility: hidden'); //Убираем кнопку
+                    timerId1 = setInterval(loop, 500);
                 });
                 clearInterval(timerId);
+                clearInterval(timerId1);
+
             }
         }
     });
@@ -177,4 +179,5 @@ let field = new Field();
 let apple = new Apple;
 let snake = new Snake();
 let timerId = setInterval(loop, 500);
+let timerId1;
 
