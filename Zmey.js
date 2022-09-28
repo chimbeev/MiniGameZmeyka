@@ -137,10 +137,10 @@ function loop() {
                     // Ставим яблочко в случайное место
                     apple.getApple();// Рисуем новое яблочко
                     btn.setAttribute('style', 'visibility: hidden'); //Убираем кнопку
-                    timerId1 = setInterval(loop, 500);
+                    timerId = setInterval(loop, 500);
                 });
                 clearInterval(timerId);
-                clearInterval(timerId1);
+
 
             }
         }
@@ -179,5 +179,5 @@ let field = new Field();
 let apple = new Apple;
 let snake = new Snake();
 let timerId = setInterval(loop, 500);
-let timerId1;
+
 
